@@ -29,7 +29,8 @@ fi
 # --- System Dependencies (Debian/Ubuntu) ---
 echo -e "${BLUE}Checking for system dependencies...${NC}"
 if command -v apt-get &> /dev/null; then
-    sudo apt-get update
+    # Ignore update errors (often due to unrelated broken repos)
+    sudo apt-get update || true
     sudo apt-get install -y \
         libwebkit2gtk-4.1-dev \
         build-essential \
