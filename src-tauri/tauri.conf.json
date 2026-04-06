@@ -38,11 +38,7 @@
     "resources": ["server.py"],
     "macOS": {
       "entitlements": "Entitlements.plist",
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSAllowsLocalNetworking": true
-        }
-      }
+      "infoPlist": "Info.plist"
     }
   }
 }
