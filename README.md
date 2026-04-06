@@ -111,7 +111,21 @@ runpy-tauri/
 
 ## 🐧 Linux Installation
 
-For a quick setup on Ubuntu/Debian, you can use the provided installation script:
+For Ubuntu/Debian, the easiest way to install RunPy is using the **.deb package**.
+
+### 1. Download the Latest Release
+Go to the [Releases](https://github.com/mnsdojo/runpy/releases) page and download `runpy_1.0.0_amd64.deb`.
+
+### 2. Install
+```bash
+sudo dpkg -i runpy_*.deb
+sudo apt-get install -f # Fix missing dependencies if any
+```
+
+---
+
+## 🛠️ Advanced: Build from Source
+If you want to build the app manually or using the one-liner script:
 
 ### The One-Liner (curl):
 If you have `curl` and `git` installed, you can just run this command to install RunPy directly:
