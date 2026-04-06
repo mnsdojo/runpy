@@ -107,7 +107,29 @@ runpy-tauri/
 | Startup time | Fast | Slower |
 | Runtime | OS WebView | Bundled Chromium |
 | Language | Rust | Node.js |
-# runny
-# runny
-# runny
-# runpy
+---
+
+## 🐧 Linux Installation
+
+For a quick setup on Ubuntu/Debian, you can use the provided installation script:
+
+### The One-Liner (curl):
+If you have `curl` and `git` installed, you can just run this command to install RunPy directly:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/mnsdojo/runpy/main/scripts/install-linux.sh | bash
+```
+
+### Alternatively (Manual):
+If you have already cloned the repo:
+
+```bash
+chmod +x scripts/install-linux.sh
+./scripts/install-linux.sh
+```
+
+The installer will:
+1. Install necessary system dependencies (`webkit2gtk`, `libssl`, etc.)
+2. Install Rust (if not already present)
+3. Build the production `.deb` package
+4. Install the package to your system
