@@ -65,7 +65,7 @@ npm install
 
 # --- Build the App ---
 echo -e "${BLUE}Building $APP_NAME (Debian package only)...${NC}"
-npm run tauri build -- --bundle deb
+npm run tauri build -- --bundles deb
 
 # --- Locate and Install the .deb package ---
 DEB_PACKAGE=$(find src-tauri/target/release/bundle/deb -name "*.deb" | head -n 1)
