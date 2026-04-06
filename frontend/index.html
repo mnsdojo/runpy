@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RunPy</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+</head>
+<body>
+
+  <!-- Title Bar -->
+  <div id="titlebar" data-tauri-drag-region>
+    <div id="titlebar-left">
+      <div id="app-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#f7c948"/>
+          <path d="M2 17l10 5 10-5" stroke="#f7c948" stroke-width="2" fill="none"/>
+          <path d="M2 12l10 5 10-5" stroke="#f7c948" stroke-width="2" fill="none"/>
+        </svg>
+        <span>RunPy</span>
+      </div>
+    </div>
+    <div id="titlebar-center">
+      <span id="filename-display">untitled.py</span>
+    </div>
+    <div id="titlebar-right">
+      <div id="backend-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-label">connecting...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div id="toolbar">
+    <div id="toolbar-left">
+      <button class="tb-btn" id="btn-new" title="New (Ctrl+N)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        New
+      </button>
+      <button class="tb-btn" id="btn-open" title="Open (Ctrl+O)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Open
+      </button>
+      <button class="tb-btn" id="btn-save" title="Save (Ctrl+S)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+        Save
+      </button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn tb-btn-run" id="btn-run" title="Run (Ctrl+Enter)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Run
+      </button>
+      <button class="tb-btn" id="btn-reset" title="Reset environment">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+        Reset Env
+      </button>
+    </div>
+    <div id="toolbar-center">
+      <label class="toggle-wrap">
+        <input type="checkbox" id="toggle-autorun" checked />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">Auto-run</span>
+      </label>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="toggle-persistent" checked />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">Persistent env</span>
+      </label>
+    </div>
+    <div id="toolbar-right">
+      <button class="tb-btn" id="btn-install">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        pip install
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="main-layout">
+    <div id="editor-pane">
+      <div id="editor-header">
+        <span class="pane-label">EDITOR</span>
+        <span id="exec-time" class="exec-badge"></span>
+      </div>
+      <div id="codemirror-wrap">
+        <textarea id="code-editor"></textarea>
+      </div>
+    </div>
+
+    <div id="resize-handle"></div>
+
+    <div id="right-pane">
+      <div id="output-pane">
+        <div id="output-header">
+          <div class="pane-tabs">
+            <button class="tab-btn active" data-tab="output">Output</button>
+            <button class="tab-btn" data-tab="variables">Variables</button>
+            <button class="tab-btn" data-tab="internals">Internals</button>
+          </div>
+          <button id="btn-clear-output" class="icon-btn" title="Clear output">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4h6v2"/></svg>
+          </button>
+        </div>
+        <div id="tab-output" class="tab-content active">
+          <div id="output-container"></div>
+        </div>
+        <div id="tab-variables" class="tab-content">
+          <div id="variables-container">
+            <p class="empty-hint">No variables yet. Run some code!</p>
+          </div>
+        </div>
+        <div id="tab-internals" class="tab-content">
+          <div id="internals-container">
+            <p class="empty-hint">Compile code to see its internals flow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- pip install modal -->
+  <div id="install-modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>pip install</span>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="install-input" placeholder="e.g. numpy pandas requests" autocomplete="off" />
+        <p class="modal-hint">Space-separate multiple packages</p>
+        <button id="btn-do-install" class="btn-primary">Install</button>
+      </div>
+      <div id="install-output" class="install-log hidden"></div>
+    </div>
+  </div>
+  <div id="overlay" class="hidden"></div>
+
+  <script type="module" src="renderer.js"></script>
+</body>
+</html>
